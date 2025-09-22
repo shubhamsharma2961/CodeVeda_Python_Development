@@ -1,0 +1,36 @@
+{% extends "tasks/base.html" %}
+{% block content %}
+<h2>Your Tasks</h2>
+<a href="{% url 'tasks:task_add' %}" class="btn btn-success mb-3">+ Add Task</a>
+
+<p>Logged in as: {{ request.user.username }}</p>
+<pre>{{ tasks }}</pre>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Due Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td><a href="{% url 'tasks:task_detail' task.pk %}">{{ task.title }}</a></td>
+            <td>{{ task.is_completed|yesno:"Completed,Pending" }}</td>
+            <td>{{ task.due_date|date:"Y-m-d" }}</td>
+            <td>
+                <a href="{% url 'tasks:task_update' task.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'tasks:task_delete' task.pk %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No tasks yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+
